@@ -15,7 +15,8 @@
   },
   "emulators": {
     "hosting": {
-      "port": null
+      "port": 5000,
+      "host": "0.0.0.0"
     },
     "ui": {
       "enabled": false
