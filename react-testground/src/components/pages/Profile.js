@@ -6,12 +6,11 @@ import {useAuth} from '../../contexts/AuthContext'
 export default function Profile() {
     const { currentUser, logout } = useAuth()
     if(currentUser && currentUser.email)
-
-    
-
     return( 
     
     <h2>{currentUser.email}</h2>
     
     )
+
+    return(<h1>You are nothing</h1>)
 }

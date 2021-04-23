@@ -1,19 +1,24 @@
 import React, { useRef, useState } from "react"
 import { Form, Button, Card, Alert } from "react-bootstrap"
 import { useAuth } from "../../contexts/AuthContext.js"
-import { Link, useHistory } from "react-router-dom"
+import { useHistory } from "react-router-dom"
 import "bootstrap/dist/css/bootstrap.css"
 
 export default function Signup() {
   const emailRef = useRef()
   const passwordRef = useRef()
   const passwordConfirmRef = useRef()
-  const {signup}  = useAuth()
+
+  const emailRef2 = useRef()
+  const passwordRef2 = useRef()
+
+  const {signup, login, logout}  = useAuth()
   const [error, setError] = useState("")
   const [loading, setLoading] = useState(false)
   const history = useHistory()
+  const { currentUser} = useAuth()
 
-  async function handleSubmit(e) {
+  async function handleSignInSubmit(e) {
     e.preventDefault()
 
     if (passwordRef.current.value !== passwordConfirmRef.current.value) {
@@ -32,13 +37,82 @@ export default function Signup() {
     setLoading(false)
   }
 
+  async function handleLogInSubmit(e) {
+    e.preventDefault()
+
+    try {
+      setError("")
+      setLoading(true)
+      await login(emailRef2.current.value, passwordRef2.current.value)
+      history.push("/profile")
+    } catch {
+      setError("Failed to log in")
+    }
+
+    setLoading(false)
+  }
+
+  async function handleLogOutSubmit(e) {
+    e.preventDefault()
+
+    try {
+      setError("")
+      setLoading(true)
+      await logout()
+      history.push("/profile")
+    } catch {
+      setError("Failed to log out")
+    }
+
+    setLoading(false)
+  }
+
+
+  if(currentUser)
+    return(
+    <>
+    <h1>You are already Signed in! {currentUser.email}</h1>
+      <Card>
+        <Card.Body>
+      <Form onSubmit={handleLogOutSubmit}>
+                      <Button disabled={loading} className="w-100" type="submit">
+              
+              Log Out
+            </Button>
+      </Form>
+        </Card.Body>
+      </Card>
+      </>
+      )
+
   return (
     <>
       <Card>
         <Card.Body>
+        {error && <Alert variant="danger">{error}</Alert>}
+          <h2 className="text-center mb-4">Log In</h2>
+          <Form onSubmit={handleLogInSubmit}>
+            <Form.Group id="email">
+              <Form.Label>Email</Form.Label>
+              <Form.Control type="email" ref={emailRef2} required />
+            </Form.Group>
+            <Form.Group id="password">
+              <Form.Label>Password</Form.Label>
+              <Form.Control type="password" ref={passwordRef2} required />
+            </Form.Group>
+            <Button disabled={loading} className="w-100" type="submit">
+              Log In
+            </Button>
+        </Form>
+        </Card.Body>
+        </Card>
+
+
+
+      <Card>
+        <Card.Body>
           <h2 className="text-center mb-4">Sign Up</h2>
-          {error && <Alert variant="danger">{error}</Alert>}
-          <Form onSubmit={handleSubmit}>
+          <Form onSubmit={handleSignInSubmit}>
             <Form.Group id="email">
               <Form.Label>Email</Form.Label>
               <Form.Control type="email" ref={emailRef} required />
@@ -57,9 +131,7 @@ export default function Signup() {
           </Form>
         </Card.Body>
       </Card>
-      <div className="w-100 text-center mt-2">
-        Already have an account? <Link to="/login">Log In</Link>
-      </div>
+
     </>
   )
 }
