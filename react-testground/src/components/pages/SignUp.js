@@ -5,14 +5,17 @@ import { useHistory } from "react-router-dom"
 import "bootstrap/dist/css/bootstrap.css"
 
 export default function Signup() {
+  //Sign up Refs
   const emailRef = useRef()
   const passwordRef = useRef()
   const passwordConfirmRef = useRef()
-
+  //Login Refs
   const emailRef2 = useRef()
   const passwordRef2 = useRef()
 
-  const {signup, login, logout}  = useAuth()
+  const {signup, login, logout, db}  = useAuth()
+  const profilePath = db.collection('Users')
+
   const [error, setError] = useState("")
   const [loading, setLoading] = useState(false)
   const history = useHistory()
@@ -28,8 +31,21 @@ export default function Signup() {
     try {
       setError("")
       setLoading(true)
-      await signup(emailRef.current.value, passwordRef.current.value)
-      history.push("/profile")
+      await signup(emailRef.current.value, passwordRef.current.value).then((userCredential) => {
+        // Signed in 
+        var user = userCredential.user;
+        profilePath.doc(user.uid).set({
+          newUser: "Yes"
+        })
+        // ...
+      })
+      .catch((error) => {
+        var errorCode = error.code
+        var errorMessage = error.message
+        console.log(errorCode)
+        console.log(errorMessage)
+        setError("Failed to log in")
+    })
     } catch {
       setError("Failed to create an account. Email already in use.")
     }
@@ -59,7 +75,7 @@ export default function Signup() {
       setError("")
       setLoading(true)
       await logout()
-      history.push("/profile")
+      history.push("/")
     } catch {
       setError("Failed to log out")
     }
