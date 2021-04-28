@@ -1,7 +1,9 @@
 import React, { useRef, useState } from "react"
 import "bootstrap/dist/css/bootstrap.css"
 import {useAuth} from '../../contexts/AuthContext'
-import { Form, Button, Card,  Row } from "react-bootstrap"
+import { Form, Button, Card,Row, Alert } from "react-bootstrap"
+import { Link } from "react-router-dom"
+
 
 //Profile in progress
 export default function Profile() {
@@ -13,13 +15,13 @@ export default function Profile() {
     const sexRef = useRef()
     const ageRef = useRef()
     const profilePath = db.collection("Users")
-
+    
     const [error, setError] = useState("")
     const [loading, setLoading] = useState(false)
 
-
     async function handleSubmit(e) {
-    
+      
+      e.preventDefault()
         try {
           setError("")
           setLoading(true)
@@ -30,6 +32,7 @@ export default function Profile() {
             weight: weightRef.current.value,
             age:    ageRef.current.value
           })
+          setError("Profile Updated")
         } catch {
           setError("Profile faied to update")
         }
@@ -40,23 +43,18 @@ export default function Profile() {
 
     if(currentUser && currentUser.email){
 
-        /*
-     db.collection("Users").doc(currentUser.uid)
-        .onSnapshot((doc) => {
 
-        });
-
-        */
     return( 
     <>  
     <Card>
     <Card.Body>
       <h2 className="text-center mb-4">Edit Profile</h2>
+      {error && <Alert variant="success">{error}</Alert>}
       <Form onSubmit={handleSubmit}>
 
             <Form.Group as={Row} id="name">
                 <Form.Label>Name</Form.Label>
-                <Form.Control type="text" ref={nameRef}  />
+                <Form.Control type="text" ref={nameRef}/>
             </Form.Group>
 
             <Form.Group as={Row} id="sex">
@@ -74,7 +72,7 @@ export default function Profile() {
             </Form.Group>
 
             <Form.Group as={Row} id="weight">
-                <Form.Label>weight</Form.Label>
+                <Form.Label>Weight</Form.Label>
                 <Form.Control type="text" ref={weightRef}  />
             </Form.Group>
 
@@ -90,10 +88,16 @@ export default function Profile() {
     </Card.Body>
   </Card>
         </>
-
-    
     )
     }
 
-    return(<h1>You are nothing</h1>)
+    return(
+    <>
+    <h1>You are not logged in!</h1>
+    
+    <div className="w-100 text-center mt-2">
+        Click on the link to <Link to="/signup">Login or Sign up!</Link>
+    </div>
+    </>
+    )
 }
