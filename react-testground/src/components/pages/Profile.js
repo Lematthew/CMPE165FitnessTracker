@@ -3,6 +3,7 @@ import "bootstrap/dist/css/bootstrap.css"
 import {useAuth} from '../../contexts/AuthContext'
 import { Form, Button, Card,Row, Alert } from "react-bootstrap"
 import { Link } from "react-router-dom"
+var ReactDOM = require('react-dom');
 
 
 //Profile in progress
@@ -15,6 +16,12 @@ export default function Profile() {
     const sexRef = useRef()
     const ageRef = useRef()
     const profilePath = db.collection("Users")
+
+    var nameVal = ""
+    var sexVal =""
+    var weightVal =""
+    var heightVal =""
+    var ageVal =""
     
     const [error, setError] = useState("")
     const [loading, setLoading] = useState(false)
@@ -43,9 +50,37 @@ export default function Profile() {
 
     if(currentUser && currentUser.email){
 
+      profilePath.doc(currentUser.uid).onSnapshot((doc) => {
+          nameVal   = doc.data().name
+          sexVal    = doc.data().sex
+          ageVal    = doc.data().age
+          weightVal = doc.data().weight
+          heightVal = doc.data().height
+          const element = ( 
+            <>
+          <h1>Your Current Profile</h1>
+          <h2>Name:   {nameVal}   </h2> 
+          <h2>Gender: {sexVal}    </h2>
+          <h2>Age:    {ageVal}    </h2>
+          <h2>Height: {heightVal} </h2>
+          <h2>Weight: {weightVal} </h2>
+            </>
+            
+            
+            );
+          ReactDOM.render(element, document.getElementById('Results'));
+
+      });
+  
+
+
 
     return( 
-    <>  
+    <>
+
+    <div id="Results" className="w-100 text-center mt-2"></div>
+
+
     <Card>
     <Card.Body>
       <h2 className="text-center mb-4">Edit Profile</h2>
@@ -54,12 +89,12 @@ export default function Profile() {
 
             <Form.Group as={Row} id="name">
                 <Form.Label>Name</Form.Label>
-                <Form.Control type="text" ref={nameRef}/>
+                <Form.Control type="text" ref={nameRef} defaultValue = {nameVal} />
             </Form.Group>
 
             <Form.Group as={Row} id="sex">
             <Form.Label>Gender</Form.Label>
-                <Form.Control as="select" ref ={sexRef}>
+                <Form.Control as="select" ref ={sexRef} defaultValue = "Female">
                     <option>Male</option>
                     <option>Female</option>
                     <option>Other</option>
