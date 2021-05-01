@@ -22,6 +22,7 @@ export default function Profile() {
     var weightVal =""
     var heightVal =""
     var ageVal =""
+
     
     const [error, setError] = useState("")
     const [loading, setLoading] = useState(false)
@@ -37,7 +38,8 @@ export default function Profile() {
             sex:    sexRef.current.value,
             height: heightRef.current.value,
             weight: weightRef.current.value,
-            age:    ageRef.current.value
+            age:    ageRef.current.value,
+            email:  currentUser.email
           })
           setError("Profile Updated")
         } catch {
@@ -65,7 +67,7 @@ export default function Profile() {
           <h2>Height: {heightVal} </h2>
           <h2>Weight: {weightVal} </h2>
             </>
-            
+      
             
             );
           ReactDOM.render(element, document.getElementById('Results'));

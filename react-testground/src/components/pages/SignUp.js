@@ -35,7 +35,7 @@ export default function Signup() {
         // Signed in 
         var user = userCredential.user;
         profilePath.doc(user.uid).set({
-          newUser: "Yes"
+          email: user.email
         })
         // ...
       })
