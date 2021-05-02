@@ -1,0 +1,46 @@
+/* TODO: Look into night mode/dynamic style sheets
+    https://hinty.io/vserhiyev/changing-color-themes-in-css-simple-method/
+*/
+:root {
+    --primary: #fff;
+}
+
+/* rules for all buttons */
+.btn {
+    padding: 8px 20px;
+    border-radius: 2px;
+    outline: none;
+    border: none;
+    cursor: pointer;
+}
+
+/* rules for btn subclasses */
+.btn--primary {
+    background-color: var(--primary);
+    color: #242424;
+    border: 1px solid var(--primary);
+}
+
+.btn--outline {
+    background: transparent;
+    color: #fff;
+    padding: 8px 20px;
+    border: 1px solid var(--primary);
+    transition: all 0.3s ease-out;
+}
+
+.btn--medium {
+    padding: 8px 20px;
+    font-size: 20px;
+}
+
+.btn--large {
+    padding: 10px 26px;
+    font-size: 20px;
+}
+
+.btn--medium:hover, .btn--large:hover {
+    background: #fff;
+    color: #242424;
+    transition: all 0.3s ease-out;
+}
