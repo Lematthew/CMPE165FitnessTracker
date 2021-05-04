@@ -4,7 +4,7 @@ import {Link} from 'react-router-dom';
 
 const STYLES = ['btn--primary', 'btn--outline'];
 const SIZES = ['btn--medium', 'btn--large'];
-const ROUTES = ['/', '/signup', '/profile', '/goals',  '/statistics', '/editprofile'];
+const ROUTES = ['/', '/home', '/signup', '/profile', '/goals', '/statistics', '/activity'];
 
 export const Button = ({
     // Button props

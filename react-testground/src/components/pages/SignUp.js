@@ -2,7 +2,7 @@ import React, { useRef, useState } from "react"
 import { Form, Button, Card, Alert } from "react-bootstrap"
 import { useAuth } from "../../contexts/AuthContext.js"
 import { useHistory } from "react-router-dom"
-import "bootstrap/dist/css/bootstrap.css"
+// import "bootstrap/dist/css/bootstrap.css"
 
 export default function Signup() {
   //Sign up Refs

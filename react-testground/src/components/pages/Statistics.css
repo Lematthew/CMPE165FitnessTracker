@@ -1,0 +1,23 @@
+.page-wrapper {
+  /* background-image: url('/src/images/img-1.jpg'); */
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  padding: 5rem;
+  min-height: 90vh;
+}
+
+#CHARTPLACEHOLDER {
+    width: 66%;
+    height: 20rem;
+    background-color: rgba(58, 12, 239, .7);
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.chart-wrapper {
+    display: inline-block;
+    width: 100%;
+    /* height: 400px; */
+    background: rgba(58, 128, 142, .7);
+}

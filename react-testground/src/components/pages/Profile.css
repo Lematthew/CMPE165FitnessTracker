@@ -1,0 +1,86 @@
+  .profile {
+    background-color: green;
+    justify-content: center;
+    display: flex;
+    flex-wrap: wrap;
+  }
+  
+  .page-wrapper {
+    /* background-image: url('/src/images/img-1.jpg'); */
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+    padding: 5rem;
+    min-height: 90vh;
+  }
+
+  .break {
+    flex-basis: 100%;
+    height: 0;
+  }
+
+  .profile > h1 {
+    background-color: gray;
+    padding-top: 2rem;
+    width: 100%;
+    font-size: 6rem;
+  }
+
+  .user-data {
+    background-color: #fff;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+    width: 80%;
+    max-width: 100rem;
+    display: flex;
+    justify-content: center;
+  }
+
+  .user-data-wrapper {
+    background-color: yellow;
+    display: flex;
+    flex-wrap: wrap;
+    width: 80%;
+    margin: auto;
+  }
+
+  .user-data-item {
+    min-width: 200px;
+    flex-basis: 25%;
+    box-sizing: border-box;
+    border: 5px ridge red;
+    margin: auto;
+  }
+
+  .user-data-item > h2 {
+    color: #212121;
+    font-style: italic;
+    font-size: 36px;
+    margin: 16px;
+  }
+
+  .user-data-item > p {
+    color: #454545;
+    font-size: 28px;
+    margin: 16px;
+  }
+
+  .edit-card {
+    background-color: transparent; 
+    background: aqua;
+    width: 80%;   
+    margin: auto;
+    border: none;
+  }
+
+  @media screen and (max-width: 960px) {
+    .user-data-item {
+        flex-basis: 50%;
+    }
+  }
+
+  @media screen and (max-width: 760px) {
+    .user-data-item {
+        flex-basis: 100%;
+    }
+  }

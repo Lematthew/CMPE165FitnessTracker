@@ -7,6 +7,7 @@ import Profile from './components/pages/Profile';
 import Goals from './components/pages/Goals';
 import Statistics from './components/pages/Statistics';
 import SignUp from './components/pages/SignUp';
+import Footer from './components/Footer';
 import { Container } from 'react-bootstrap';
 import { AuthProvider } from './contexts/AuthContext.js';
 
@@ -25,7 +26,8 @@ function App() {
           <Route path="/goals" exact component={Goals}/>
           <Route path="/statistics" exact component={Statistics}/>
           <Route path="/signup" exact component={SignUp}/>
-          </AuthProvider>
+        <Footer />
+        </AuthProvider>
       </Router>
       </Container>
     </>
