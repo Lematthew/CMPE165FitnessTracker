@@ -1,6 +1,11 @@
 import React from 'react';
 import '../../App.css';
 import Card from '@material-ui/core/Card';
+import CardHeader from '@material-ui/core/CardHeader';
+import CardMedia from '@material-ui/core/CardMedia';
+import CardContent from '@material-ui/core/CardContent';
+import CardActions from '@material-ui/core/CardActions';
+
 import {useAuth} from '../../contexts/AuthContext'
 
 
@@ -10,20 +15,34 @@ class GoalDisplay extends React.Component {
   }
   async componentDidMount() {
     const goals = await getGoals(this.props.currentUser, this.props.db);
-    
+
     console.log("state", this.state.goals);
     await console.log("goals", goals);
-    await this.setState({ goals })
-    console.log(this.state);
+    this.setState({ goals:goals }, () => console.log(this.state))
 }
+  renderGoal(goal) {
+    return (
+      <Card style={{ }}>
+      <CardHeader
+        // action={
+        //   <IconButton aria-label="settings">
+        //     <MoreVertIcon />
+        //   </IconButton>
+        // }
+        title={goal[0]}
+      />
+      {goal[0]}+{goal.map((metric) => {
+        return <Card>{metric}</Card>;
+        })}
+      </Card>
+    )
+  }
   render() {
     return (
       <Card>
       My Goals
       {this.state.goals.map((g) => {
-        return <Card>{g}+{g.map((metric) => {
-          return <Card>{metric}</Card>;
-          })}</Card>
+        return this.renderGoal(g)
       })}
       </Card>
     )
@@ -33,16 +52,17 @@ class GoalDisplay extends React.Component {
 async function getGoals(currentUser,db) {
   const userRef = await db.collection("Users").doc(""+currentUser);
   const goalsRef = await userRef.collection("Goals").get();
-  let goals = []
-  await goalsRef.forEach(async doc =>  {
+  console.log("goals ref ", goalsRef);
+  let goals = goalsRef.docs.map( async (doc) =>  {
     console.log(doc.id, '=>', doc.data());
     let d = doc.data();
-    const ex = await d.exercise.get()
+    let ex = await d.exercise.get()
     let flatgoals = [d.exercise.id].concat(Object.values(ex.data()))
     flatgoals = flatgoals.concat(d.metrics)
-    goals.push(flatgoals);
+    const finalFlatGoals = await Promise.all(flatgoals);
+    return finalFlatGoals;
   });
-  return goals
+  return await Promise.all(goals);
 }
 
 export default function Goals() {
