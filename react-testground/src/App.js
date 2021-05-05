@@ -25,7 +25,7 @@ function App() {
           <Route path="/goals" exact component={Goals}/>
           <Route path="/statistics" exact component={Statistics}/>
           <Route path="/signup" exact component={SignUp}/>
-          </AuthProvider>
+        </AuthProvider>
       </Router>
       </Container>
     </>
