@@ -1,8 +1,17 @@
 import React, { useRef, useState } from "react"
-import { Form, Button, Card, Alert } from "react-bootstrap"
+import Button from "@material-ui/core/Button";
+import Card from "@material-ui/core/Card";
+import CardActionArea from "@material-ui/core/CardActionArea";
+import CardActions from "@material-ui/core/CardActions";
+import CardContent from "@material-ui/core/CardContent";
+import CardMedia from "@material-ui/core/CardMedia";
+import TextField from "@material-ui/core/TextField";
+import FormControl from '@material-ui/core/FormControl';
+
+import Alert from '@material-ui/lab/Alert';
 import { useAuth } from "../../contexts/AuthContext.js"
 import { useHistory } from "react-router-dom"
-import "bootstrap/dist/css/bootstrap.css"
+// import "bootstrap/dist/css/bootstrap.css"
 
 export default function Signup() {
   //Sign up Refs
@@ -87,15 +96,14 @@ export default function Signup() {
   if(currentUser)
     return(
     <>
-    <h1>You are already Signed in! {currentUser.email}</h1>
+      <h1>You are already Signed in! {currentUser.email}</h1>
       <Card>
         <Card.Body>
-      <Form onSubmit={handleLogOutSubmit}>
-                      <Button disabled={loading} className="w-100" type="submit">
-              
+          <TextField onSubmit={handleLogOutSubmit}>
+            <Button disabled={loading} className="w-100" type="submit">      
               Log Out
             </Button>
-      </Form>
+          </TextField>
         </Card.Body>
       </Card>
       </>
@@ -107,44 +115,39 @@ export default function Signup() {
         <Card.Body>
         {error && <Alert variant="danger">{error}</Alert>}
           <h2 className="text-center mb-4">Log In</h2>
-          <Form onSubmit={handleLogInSubmit}>
-            <Form.Group id="email">
-              <Form.Label>Email</Form.Label>
-              <Form.Control type="email" ref={emailRef2} required />
-            </Form.Group>
-            <Form.Group id="password">
-              <Form.Label>Password</Form.Label>
-              <Form.Control type="password" ref={passwordRef2} required />
-            </Form.Group>
+          <form onSubmit={handleLogInSubmit}>
+            <TextField id="standard-basic" label="email">
+              <FormControl type="email" ref={emailRef2} required />
+            </TextField>
+            <TextField id="standard-basic" label="password">
+              <FormControl type="password" ref={passwordRef2} required />
+            </TextField>
             <Button disabled={loading} className="w-100" type="submit">
               Log In
             </Button>
-        </Form>
+        </form>
         </Card.Body>
-        </Card>
+      </Card>
 
 
 
       <Card>
         <Card.Body>
           <h2 className="text-center mb-4">Sign Up</h2>
-          <Form onSubmit={handleSignInSubmit}>
-            <Form.Group id="email">
-              <Form.Label>Email</Form.Label>
-              <Form.Control type="email" ref={emailRef} required />
-            </Form.Group>
-            <Form.Group id="password">
-              <Form.Label>Password</Form.Label>
-              <Form.Control type="password" ref={passwordRef} required />
-            </Form.Group>
-            <Form.Group id="password-confirm">
-              <Form.Label>Password Confirmation</Form.Label>
-              <Form.Control type="password" ref={passwordConfirmRef} required />
-            </Form.Group>
+          <TextField onSubmit={handleSignInSubmit}>
+            <TextField id="standard-basic" label="email">
+              <FormControl type="email" ref={emailRef} required />
+            </TextField>
+            <TextField id="standard-basic" label="password">
+              <FormControl type="password" ref={passwordRef} required />
+            </TextField>
+            <TextField id="standard-basic" label="password-confirm">
+              <FormControl type="password" ref={passwordConfirmRef} required />
+            </TextField>
             <Button disabled={loading} className="w-100" type="submit">
               Sign Up
             </Button>
-          </Form>
+          </TextField>
         </Card.Body>
       </Card>
 

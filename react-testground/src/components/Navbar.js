@@ -9,7 +9,6 @@ function Navbar() {
     const [click, setClick] = useState(false);
     const [button, setButton] = useState(true);
 
-
     // State modifying handlers
     const handleClick = () => setClick(!click);
     const closeMobileMenu = () => setClick(false);
@@ -63,7 +62,7 @@ function Navbar() {
                             </Link>
                         </li>           
                     </ul>
-                    {button && <Button buttonStyle='btn--outline'>SIGN UP</Button>}
+                    {button && <Button buttonStyle='btn--outline' linkTo='/signup'>SIGN UP</Button>}
                 </div>
             </nav>
         </>
