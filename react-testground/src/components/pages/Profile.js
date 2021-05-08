@@ -1,5 +1,5 @@
 import React, { useRef, useState } from "react"
-import "bootstrap/dist/css/bootstrap.css"
+// import "bootstrap/dist/css/bootstrap.css"
 import {useAuth} from '../../contexts/AuthContext'
 import { Form, Button, Card, Row, Alert } from "react-bootstrap"
 import { Link } from "react-router-dom"
