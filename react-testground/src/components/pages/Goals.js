@@ -10,7 +10,9 @@ import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
 import FormHelperText from '@material-ui/core/FormHelperText';
 import FormControl from '@material-ui/core/FormControl';
+import TextField from '@material-ui/core/TextField';
 import Select from '@material-ui/core/Select';
+import Button from '@material-ui/core/Button';
 
 
 import {useAuth} from '../../contexts/AuthContext'
@@ -25,40 +27,11 @@ function renderGoal(goal) {
       //     <MoreVertIcon />
       //   </IconButton>
       // }
-      title={goal.exercise}
+      title={goal.id}
     />
-    {Object.entries(goal).filter(r=>{return r[0]!="exercise"}).map((entry) => {
-      return <Card style={{ margin: "5px"}}>{entry[0]} {entry[1]}</Card>;
+    {Object.entries(goal).filter(r=>{return r[0]!="id"}).map((entry) => {
+      return ""+entry[0] + " " + entry[1];
       })}
-    </Card>
-  )
-}
-
-function AddGoal(exercises) {
-  const exs = exercises.map(e => {return e.id})
-  const [exercise, setExercise] = React.useState("select exercise")
-  const [fields, setFileds] =     React.useState({})
-  const onExerciseChange = (exercise) => {
-    setExercise(exercise)
-    setFileds(Object.entries(exercises).filter())
-  }
-  return (
-    <Card>
-      New Goal
-      <FormControl style={{ margin: "5px",minWidth: 120,}}>
-        <InputLabel id="demo-simple-select-label">Exercise</InputLabel>
-        <Select
-          labelId="demo-simple-select-label"
-          id="demo-simple-select"
-          value={exercise}
-          onChange={onExerciseChange}
-          inputProps={{ 'aria-label': 'Without label' }}
-        >
-        {exs.map((f) => { 
-          return <MenuItem value={f}>{f}</MenuItem> 
-        })}
-        </Select>
-      </FormControl>
     </Card>
   )
 }
@@ -68,7 +41,6 @@ async function getGoals(currentUser,db) {
   const goalsRef = await userRef.collection("Goals").get();
   let goals = goalsRef.docs.map( async (doc) =>  {
     let d = doc.data();
-    d.exercise = await d.exercise.id
     return d;
   });
   return await Promise.all(goals);
@@ -85,18 +57,87 @@ async function getExercises(db) {
   return await Promise.all(exercises);
 }
 
+async function createNewGoal(currentUser, db, newGoal) {
+  let goal = Object.fromEntries(newGoal.fields)
+  goal.id = newGoal.id
+  console.log("adding new goal", goal, " for user ", currentUser)
+  const userRef  = await db.collection("Users").doc(""+currentUser);
+  const goalRef = await userRef.collection("Goals").add(goal);
+  // goalRef.set(await Promise.all(goal))
+}
+
 export default function Goals() {
   let testuser = "C4QrPxqZN2M4FtdUE38HdGIdykK2"
   const { currentUser, db } = useAuth()
   const [ goals, setGoals ] =         React.useState([]);
   const [ exercises, setExercises ] = React.useState([]);
+
+  // new goal
+  const [fields, setFields] =     React.useState([])
+  const [exercise, setExercise] = React.useState({id:"select exercise"})
+
   React.useEffect(async () => {
     // console.log("user's goals", newGoals);
-    setGoals(await getGoals(currentUser, db));
-    setExercises([{dist:5, d:4, id:"running"},{dist:5, d:3, id:"thing"}])  //await getExercises(db)
-    console.log(currentUser)
-    console.log(exercises)
+    setGoals(await getGoals(currentUser.uid, db));
+    setExercises(await getExercises(db))  //await getExercises(db)
+    console.log("got current user", currentUser)
+    console.log("got users goals", goals)
+    console.log("got exercises", exercises)
   }, [])
+  
+  const onExerciseChange = (exercise) => {
+    setExercise(exercise)
+    console.log("ex", exercise)
+    setFields(Object.entries(exercise).filter(x=>{return x[0]!="id"}))
+    console.log("fields", fields)
+  }
+  const onFieldChange = (field, newVal) => {
+    const newFields = fields.map(x => {
+      if(x[0]!=field) 
+        return x
+      else
+        return [field, newVal]
+    })
+    setFields(newFields)
+  }
+
+  function AddGoal(exs) {
+    return (
+      <Card>
+        New Goal
+        <FormControl style={{ margin: "5px",minWidth: 120,}}>
+          <InputLabel id="demo-simple-select-label">Exercise</InputLabel>
+          <Select
+            labelId="demo-simple-select-label"
+            id="demo-simple-select"
+            value={""+exercise.id}
+            onChange={e => onExerciseChange(e.target.value)}
+            inputProps={{ 'aria-label': 'Without label' }}
+            renderValue={(value) => value.id}
+          >
+          {exs.map((f) => { 
+            return <MenuItem value={f}>{f.id}</MenuItem> 
+          })}
+          </Select>
+        </FormControl>
+        {fields.map(x => {return <Card>{x[0]} <TextField
+            id="standard-number"
+            label="Number"
+            type="number"
+            InputLabelProps={{
+              shrink: true,
+            }}
+            onChange={e => onFieldChange(x[0], e.target.value)}
+            value={x[1]}
+          /></Card>})}
+        <Button variant="contained" color="primary" onClick={
+            e=>createNewGoal(currentUser.uid, db, {id:exercise.id, fields})}>
+          Add
+        </Button>
+      </Card>
+    )
+  }
+  
 
   return (
     <Card>
@@ -104,7 +145,8 @@ export default function Goals() {
       {goals.map((g) => {
         return renderGoal(g)
       })}
-      {AddGoal(exercises)}
+      {/* don't show exercises that we are already doing */}
+      {AddGoal(exercises.filter(x=>{return goals.reduce((p,n)=>{return p&x.id!=n.id}, true)}))}
     </Card>
   )
 }
