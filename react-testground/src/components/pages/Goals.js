@@ -14,24 +14,31 @@ import TextField from '@material-ui/core/TextField';
 import Select from '@material-ui/core/Select';
 import Button from '@material-ui/core/Button';
 
-
 import {useAuth} from '../../contexts/AuthContext'
+import { IconButton } from '@material-ui/core';
+import IconLink from "@material-ui/icons/Link";
+import IconHelp from "@material-ui/icons/HelpOutline";
+
 
 
 function renderGoal(goal) {
   return (
-    <Card style={{ margin: "5px"}}>
+    <Card style={{ margin: "5px", maxWidth: "350px"}}>
     <CardHeader
-      // action={
-      //   <IconButton aria-label="settings">
-      //     <MoreVertIcon />
-      //   </IconButton>
-      // }
+      action={
+        <IconButton type="submit" aria-label="settings" action={goal.link}>
+          <IconHelp />
+        </IconButton>
+      }
       title={goal.id}
     />
-    {Object.entries(goal).filter(r=>{return r[0]!="id"}).map((entry) => {
+    {Object.entries(goal).filter(r=>{return r[0]!="id" & r[0]!='link'}).map((entry) => {
       return ""+entry[0] + " " + entry[1];
       })}
+      <CardActions>
+        <Button size="small">edit</Button>
+        <Button size="small" color="secondary">remove</Button>
+      </CardActions>
     </Card>
   )
 }
@@ -88,7 +95,7 @@ export default function Goals() {
   const onExerciseChange = (exercise) => {
     setExercise(exercise)
     console.log("ex", exercise)
-    setFields(Object.entries(exercise).filter(x=>{return x[0]!="id"}))
+    setFields(Object.entries(exercise).filter(x=>{return x[0]!="id" & x[0]!="link"}))
     console.log("fields", fields)
   }
   const onFieldChange = (field, newVal) => {
