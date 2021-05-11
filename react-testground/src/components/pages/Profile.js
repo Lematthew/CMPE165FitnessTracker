@@ -1,5 +1,4 @@
 import React, { useRef, useState, useEffect } from "react"
-import "bootstrap/dist/css/bootstrap.css"
 import {useAuth} from '../../contexts/AuthContext'
 import Button from "@material-ui/core/Button";
 import Card from "@material-ui/core/Card";

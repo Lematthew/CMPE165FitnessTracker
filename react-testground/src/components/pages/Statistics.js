@@ -1,5 +1,5 @@
-import React, { useState } from "react"
-import "bootstrap/dist/css/bootstrap.css"
+import React, { useEffect } from "react"
+// import "bootstrap/dist/css/bootstrap.css"
 import {useAuth} from '../../contexts/AuthContext'
 import { Link } from "react-router-dom"
 import LineGraph from '../LineGraph'
@@ -13,16 +13,22 @@ export default function Statistics() {
   const { currentUser, db } = useAuth()
   const profilePath = db.collection("Users")
 
-  let excerciseVal = []
+  var excerciseVal = []
   var metric0Val =""
   var metric1Val =""
-  let ActivityData = []
-  let GoalData = []
+  var ActivityData = []
+  var GoalData = []
 
+  // useEffect(() => {
+  //   doMath();
+  // }, []);
+
+  // const doMath = () => {
+    
     // sample code
     let BaseTime = new Date('2021-05-03T00:00:00').getTime();
     for(var i = 0; i < 100; i++) {
-        ActivityData.push({
+      ActivityData.push({
             time: new Date(BaseTime + i*24*60*60*1000),
             value: Math.round(100*Math.random())
         });
@@ -41,6 +47,8 @@ export default function Statistics() {
         gData: GoalData
     });
 
+  // };
+
   if(currentUser && currentUser.email){
     profilePath.doc(currentUser.uid).onSnapshot((doc) => {
 
@@ -55,14 +63,13 @@ export default function Statistics() {
 
     });
   
-    return( 
+    return(   
       <>
       <div className="page-wrapper">
             <div className="chart-wrapper">
                 {/* <LineGraph activityData={ActivityData} goalData={GoalData} title={excerciseVal} color="#478125" /> */}
                 <LineGraph activityData={excerciseVal[0].aData} goalsData={excerciseVal[0].gData} title={excerciseVal[0].title} color="#478125" />
             </div>
-        <div id="CHARTPLACEHOLDER"></div>
       </div>
       </>
     )

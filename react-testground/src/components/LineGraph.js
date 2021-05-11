@@ -1,11 +1,10 @@
-import React from "react"
+import React, { Component } from "react"
 import Chart from 'chart.js/auto'
 let myChart;
 
-class LineGraph extends React.Component {
+class LineGraph extends Component {
     constructor(props) {
-        super(props);
-        this.canvasref=React.createRef();
+        super(props);;
     }
 
     componentDidUpdate() {
@@ -18,7 +17,7 @@ class LineGraph extends React.Component {
     componentDidMount() {
         if (typeof myChart !== "undefined") myChart.destroy();
 
-        myChart = new Chart(this.canvasref.current, {
+        myChart = new Chart(document.getElementById("Line-Chart"), {
             type: 'line',
             options: {
                 maintainAspectRatio: false,
@@ -65,8 +64,7 @@ class LineGraph extends React.Component {
     render () {
         return (
             <>
-                <div className="CSBS" height='20px' width='20px' backgroundColor='#057912' />
-                <div><canvas height='400px' width='800px' ref={this.chartref} /></div>
+            <canvas height='400px' width='800px' id="Line-Chart" ></canvas>
             </>
         )
     }
