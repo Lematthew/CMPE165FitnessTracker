@@ -111,7 +111,6 @@ export default function Profile() {
     //   {/* <div id="Results" className="w-100 text-center mt-2" /> */}
     return( 
       <>
-      <Button>gogg</Button>
       {element}
       {/* <div className="page-wrapper"></div> */}
       <Card className="edit-card">
