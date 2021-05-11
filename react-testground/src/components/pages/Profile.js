@@ -90,7 +90,7 @@ export default function Profile() {
               <p>{sexVal}</p>
             </div>
             <div className="user-data-item">
-              <h2>Age </h2>
+              <h2>Date of Birth </h2>
               <p>{ageVal}</p>
             </div>
             <div className="user-data-item">
@@ -136,7 +136,7 @@ export default function Profile() {
           <FormControl type="text" ref={weightRef}  />
         </TextField>
 
-        <TextField id="standard-basic" label="age" value={ageVal} onChange={(e)=> { setAge(e.target.value) }}>
+        <TextField id="standard-basic" label="Date of Birth" value={ageVal} onChange={(e)=> { setAge(e.target.value) }}>
           <FormControl type="text" ref={ageRef}  />
         </TextField>
 

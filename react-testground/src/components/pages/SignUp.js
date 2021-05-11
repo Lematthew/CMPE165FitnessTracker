@@ -9,8 +9,12 @@ import TextField from "@material-ui/core/TextField";
 import FormControl from '@material-ui/core/FormControl';
 
 import Alert from '@material-ui/lab/Alert';
-import { useAuth } from "../../contexts/AuthContext.js"
+import { useAuth, AuthProvider } from "../../contexts/AuthContext.js"
 import { useHistory } from "react-router-dom"
+
+import { auth } from "../../firebase"
+import firebase from "firebase/app"
+
 // import "bootstrap/dist/css/bootstrap.css"
 
 export default function Signup() {
@@ -22,13 +26,13 @@ export default function Signup() {
   const emailRef2 = useRef()
   const passwordRef2 = useRef()
 
-  const {signup, login, logout, db}  = useAuth()
+  const {currentUser, signup, login, logout, db}  = useAuth()
   const profilePath = db.collection('Users')
 
   const [error, setError] = useState("")
   const [loading, setLoading] = useState(false)
   const history = useHistory()
-  const { currentUser} = useAuth()
+  const authCont = useAuth()
 
   async function handleSignInSubmit(e) {
     e.preventDefault()
@@ -96,59 +100,81 @@ export default function Signup() {
   if(currentUser)
     return(
     <>
-      <h1>You are already Signed in! {currentUser.email}</h1>
+      <h1>Signed in as {currentUser.email}</h1>
       <Card>
-        <Card.Body>
-          <TextField onSubmit={handleLogOutSubmit}>
-            <Button disabled={loading} className="w-100" type="submit">      
-              Log Out
-            </Button>
-          </TextField>
-        </Card.Body>
+        <TextField onSubmit={handleLogOutSubmit}>
+          <Button disabled={loading} className="w-100" type="submit">      
+            Log Out
+          </Button>
+        </TextField>
       </Card>
-      </>
-      )
+    </>
+    )
 
   return (
     <>
       <Card>
-        <Card.Body>
         {error && <Alert variant="danger">{error}</Alert>}
-          <h2 className="text-center mb-4">Log In</h2>
-          <form onSubmit={handleLogInSubmit}>
-            <TextField id="standard-basic" label="email">
-              <FormControl type="email" ref={emailRef2} required />
-            </TextField>
-            <TextField id="standard-basic" label="password">
-              <FormControl type="password" ref={passwordRef2} required />
-            </TextField>
-            <Button disabled={loading} className="w-100" type="submit">
-              Log In
-            </Button>
+        <h2 className="text-center mb-4">Log In</h2>
+        <form onSubmit={handleLogInSubmit}>
+          <TextField id="standard-basic" label="email">
+            <FormControl type="email" ref={emailRef2} required />
+          </TextField>
+          <TextField id="standard-basic" label="password">
+            <FormControl type="password" ref={passwordRef2} required />
+          </TextField>
+          <Button disabled={loading} className="w-100" type="submit">
+            Log In
+          </Button>
+          <Button disabled={loading} onClick={()=>{
+            var provider = new firebase.auth.GoogleAuthProvider();
+
+            auth.signInWithPopup(provider)
+            .then((result) => {
+              /** @type {auth.OAuthCredential} */
+              var credential = result.credential;
+
+              // This gives you a Google Access Token. You can use it to access the Google API.
+              var token = credential.accessToken;
+              // The signed-in user info.
+              var user = result.user;
+              console.log("logged in user ", user)
+              // ...
+            }).catch((error) => {
+              // Handle Errors here.
+              var errorCode = error.code;
+              var errorMessage = error.message;
+              // The email of the user's account used.
+              var email = error.email;
+              // The firebase.auth.AuthCredential type that was used.
+              var credential = error.credential;
+              // ...
+              console.log("error logging in user ", email)
+            });
+            }}>
+            Log In With Google
+          </Button>
         </form>
-        </Card.Body>
       </Card>
 
 
 
       <Card>
-        <Card.Body>
-          <h2 className="text-center mb-4">Sign Up</h2>
-          <TextField onSubmit={handleSignInSubmit}>
-            <TextField id="standard-basic" label="email">
-              <FormControl type="email" ref={emailRef} required />
-            </TextField>
-            <TextField id="standard-basic" label="password">
-              <FormControl type="password" ref={passwordRef} required />
-            </TextField>
-            <TextField id="standard-basic" label="password-confirm">
-              <FormControl type="password" ref={passwordConfirmRef} required />
-            </TextField>
-            <Button disabled={loading} className="w-100" type="submit">
-              Sign Up
-            </Button>
+        <h2 className="text-center mb-4">Sign Up</h2>
+        <TextField onSubmit={handleSignInSubmit}>
+          <TextField id="standard-basic" label="email">
+            <FormControl type="email" ref={emailRef} required />
           </TextField>
-        </Card.Body>
+          <TextField id="standard-basic" label="password">
+            <FormControl type="password" ref={passwordRef} required />
+          </TextField>
+          <TextField id="standard-basic" label="password-confirm">
+            <FormControl type="password" ref={passwordConfirmRef} required />
+          </TextField>
+          <Button disabled={loading} className="w-100" type="submit">
+            Sign Up
+          </Button>
+        </TextField>
       </Card>
 
     </>
