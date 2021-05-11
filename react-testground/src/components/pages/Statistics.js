@@ -27,18 +27,23 @@ export default function Statistics() {
     
     // sample code
     let BaseTime = new Date('2021-05-03T00:00:00').getTime();
+    let acc = 50
     for(var i = 0; i < 100; i++) {
+      let diff = Math.round(5*Math.random()) - 2.5
+      acc += diff;
       ActivityData.push({
             time: new Date(BaseTime + i*24*60*60*1000),
-            value: Math.round(100*Math.random())
+            value: Math.round(acc)
         });
     }
-
+    acc = 50
     for(var j = 0; j < 100; j++) {
-        GoalData.push({
-            time: new Date(BaseTime + j*24*60*60*1000),
-            value: Math.round(100*Math.random())
-        });
+      let diff = Math.round(5*Math.random()) - 2.5
+      acc += diff;
+      GoalData.push({
+          time: new Date(BaseTime + j*24*60*60*1000),
+          value: Math.round(acc)
+      });
     }
 
     excerciseVal.push({
