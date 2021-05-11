@@ -34,7 +34,7 @@ function Navbar() {
                 <div className="navbar-container">
                     {/* Home icon on leftmost side; links to root page */}
                     <Link to ="/" className="navbar-logo" onClick={closeMobileMenu}>
-                        FT<i className='fas fa-plus' />
+                        FT  <i className='fas fa-plus' />
                     </Link>
 
                     <div className="menu-icon" onClick={handleClick}>
