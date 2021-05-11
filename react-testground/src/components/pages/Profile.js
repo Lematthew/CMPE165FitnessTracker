@@ -23,11 +23,11 @@ var ReactDOM = require('react-dom');
 export default function Profile() {
 
   const { currentUser, db } = useAuth()
-  const nameRef = useRef()
+  const nameRef =   useRef()
   const heightRef = useRef()
   const weightRef = useRef()
-  const sexRef = useRef()
-  const ageRef = useRef()
+  const sexRef =    useRef()
+  const ageRef =    useRef()
   const profilePath = db.collection("Users")
 
   const [nameVal,   setName ] =   useState("")
@@ -47,7 +47,6 @@ export default function Profile() {
         setAge(doc.data().age)
         setWeight(doc.data().weight)
         setHeight(doc.data().height)
-        // ReactDOM.render(element, document.getElementById('Results'));
       });
     }
   }, [])
@@ -62,7 +61,7 @@ export default function Profile() {
         name:   nameVal,
         sex:    sexVal,
         height: heightVal,
-        weight: heightVal,
+        weight: weightVal,
         age:    ageVal,
         email:  currentUser.email
       })
